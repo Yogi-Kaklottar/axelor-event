@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models
+  xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.2.xsd">
+
+  <module name="event" package="com.axelor.event.db" />
+  <entity name="Address">
+    <string name="houseNumber" title="Flate/House Number"/>
+    <string name="street" title="Street"/>
+    <string name="landMark" title="LandMark"/>
+    <string name="city"/>
+    <string name="country"/>
+     <string name="fullAddress" namecolumn="true" readonly="true" search="houseNumber,street,landMark,city,country">
+    <![CDATA[
+    if ( houseNumber== null) {
+        return null;
+    }
+    return houseNumber +"," + street + ","+ landMark + "," + city+ "," + country;
+    ]]></string>
+  </entity>
+</domain-models>

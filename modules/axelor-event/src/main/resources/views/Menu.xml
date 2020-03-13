@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
+ <menuitem name="event-root" order="-100" title="Event" icon="fa-users" icon-background="green" />
+
+  <menuitem name="event-add" order="-100" title="Add Event" parent="event-root" action="event.all" tag-style="important"/>
+   <action-view name="event.all" model="com.axelor.event.db.Event" title="Event">
+    <view type="cards" name="event-card"/>
+    <view type="grid" name="event-grid" />
+    <view type="form" name="event-form" />
+    <view type="calendar" name="event-calender"/>
+  </action-view>
+
+  <menuitem name="event-registration" order="-100" title="Event Registration" parent="event-root" action="event.registration.all" tag-style="important"/>
+   <action-view name="event.registration.all" model="com.axelor.event.db.EventRegistaration" title="Event Registration">
+    <view type="grid" name="event-registration-grid" />
+    <view type="form" name="event-registration-form" />
+  </action-view>
+
+  <menuitem name="event-address" order="-100" title="Address" parent="event-root" action="event.address.all" tag-style="important"/>
+   <action-view name="event.address.all" model="com.axelor.event.db.Address" title="Address">
+    <view type="grid" name="address-grid" />
+    <view type="form" name="address-form" />
+  </action-view>
+
+
+  </object-views>

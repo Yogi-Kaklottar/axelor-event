@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axel or.com/xml/ns/object-views/object-views_5.2.xsd">
+
+  <grid name="event-registration-grid" title="Event Registration List" model="com.axelor.event.db.EventRegistaration">
+     <field name="event"/>
+     <field name="name"/>
+     <field name="email"/>
+     <field name="address"/>
+     <field name="registrationDate"/>
+     <field name="amount"/>
+
+  </grid>
+  <form name="event-registration-form" title="Event Registration List"   model="com.axelor.event.db.EventRegistaration">
+    <panel title="Event Registration">
+      <field name="event" onChange="action-method-event-Registration-chage-event-check-capacity" hideIf="__parent__"/>
+     <field name="name"/>
+     <field name="email" pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$" widget="Email"/>
+     <field name="address"/>
+     <field name="registrationDate" onChange="action-method-event-register-date-validate-onchange,action-method-event-net-calculation"/>
+     <field name="amount"/>
+    </panel>
+  </form>
+  <action-method name="action-method-event-register-date-validate-onchange">
+    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="validateRegisterDate" />
+  </action-method>
+  <action-method name="action-method-event-Registration-chage-event-check-capacity">
+    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="checkCapacityOfEvent" />
+  </action-method>
+   <action-method name="action-method-event-net-calculation">
+    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="calculateTotalAmount" />
+  </action-method>
+
+<!--   <action-record name="action-attrs-event-registration-onload-set-default" model="com.axelor.event.db.EventRegistaration"> -->
+<!--    <field name="registrationDate" expr="eval: __dateTime__"/> -->
+<!--   </action-record> -->
+  </object-views>
