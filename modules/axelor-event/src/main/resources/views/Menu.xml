@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.2.xsd">
  <menuitem name="event-root" order="-100" title="Event" icon="fa-users" icon-background="green" />
 
-  <menuitem name="event-add" order="-100" title="Add Event" parent="event-root" action="event.all" tag-style="important"/>
+  <menuitem name="event-add" order="-100" title="Event" parent="event-root" action="event.all" tag-style="important"/>
    <action-view name="event.all" model="com.axelor.event.db.Event" title="Event">
     <view type="cards" name="event-card"/>
     <view type="grid" name="event-grid" />

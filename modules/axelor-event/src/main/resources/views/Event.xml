@@ -49,8 +49,8 @@
       <field name="totalDiscount" />
     </panel>
   </form>
-  
-  
+
+
 <action-attrs name="action-attrs-event-onchange-date">
   <attribute for="endDate" name="value" expr="eval: null" if="startDate==null"/>
    <attribute for="registrationOpen" name="value" expr="eval: null" if="startDate==null"/>

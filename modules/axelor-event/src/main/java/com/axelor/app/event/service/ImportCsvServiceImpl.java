@@ -74,7 +74,6 @@ public class ImportCsvServiceImpl implements ImportCsvService {
     Event event =
         Beans.get(EventRepository.class).find(Long.parseLong(values.get("event").toString()));
     try {
-
       if (event != null) {
         LocalDate registrationDate = eventRegistration.getRegistrationDate().toLocalDate();
         if (!(registrationDate.isBefore(event.getRegistrationOpen()))

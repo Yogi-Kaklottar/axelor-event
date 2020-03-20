@@ -46,7 +46,7 @@ public class EventRegistrationContraller {
       } else {
         response.setValue("registrationDate", null);
         response.setValue("amount", BigDecimal.ZERO);
-        response.setNotify("registration date not approved");
+        response.setNotify("registration date are not valid");
       }
     } catch (Exception e) {
 
@@ -65,15 +65,14 @@ public class EventRegistrationContraller {
     try {
       EventRegistaration eventRegistaration = request.getContext().asType(EventRegistaration.class);
       Event event = eventRegistaration.getEvent();
-      if (event == null) {
-        event = request.getContext().getParent().asType(Event.class);
-        if (event == null) {
-          response.setError("please check Event");
+      Integer eventRegistrationCount = event.getEventRegistrationList().size();
+      if (eventRegistaration.getId() == null) {
+        if (event.getCapacity() <= eventRegistrationCount) {
+          response.setError("Not More Than Capacity:" + event.getCapacity());
         }
       }
-      Integer eventRegistrationCount = event.getEventRegistrationList().size();
-      if (event.getCapacity() <= eventRegistrationCount) {
-        response.setError("Not More Than Capacity:" + event.getCapacity());
+      if (eventRegistaration.getRegistrationDate() == null) {
+        response.setError("Please fill up Registration date");
       }
     } catch (Exception e) {
 

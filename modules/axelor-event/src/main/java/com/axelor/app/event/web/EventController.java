@@ -23,7 +23,6 @@ public class EventController {
     try {
       Discount discount = request.getContext().asType(Discount.class);
       Event event = request.getContext().getParent().asType(Event.class);
-      System.out.println(discount);
       discount = eventService.calculateAmount(event, discount);
       response.setValue("discountAmount", discount.getDiscountAmount());
     } catch (Exception e) {
@@ -45,18 +44,18 @@ public class EventController {
   public void compareEventRegistrationDate(ActionRequest request, ActionResponse response) {
     try {
       Event event = request.getContext().asType(Event.class);
-      if (event.getStartDate()==null) {    	  
-          response.setError("Please Fill start Date Up Date");          
-        }
+      if (event.getStartDate() == null) {
+        response.setError("Please Fill start Date Up Date");
+      }
       LocalDate startDate = event.getStartDate().toLocalDate();
       LocalDate endDate = event.getEndDate().toLocalDate();
-      
+
       if (startDate.isAfter(endDate)) {
         response.setNotify("starting end ending date invalide");
         response.setValue("endDate", null);
       }
       if (event.getRegistrationOpen().isAfter(event.getRegistrationClose())) {
-        response.setNotify("regisstration date are invalide");
+        response.setNotify("registration date are invalide");
         response.setValue("registrationClose", null);
       }
     } catch (Exception e) {
@@ -77,7 +76,7 @@ public class EventController {
         Beans.get(ImportCsvService.class).setCsvImport(metaFile, eventId);
 
       } else {
-        response.setFlash("your file are not valid type");
+        response.setFlash("Your file are not valid type");
       }
     } catch (Exception e) {
       System.err.println("exception");
@@ -117,12 +116,12 @@ public class EventController {
       Event event = request.getContext().asType(Event.class);
       for (EventRegistaration eventRegistaration : event.getEventRegistrationList()) {
         if (eventRegistaration.getRegistrationDate() == null) {
-          response.setError("please fill up registration date");
+          response.setError("Please fill up registration date");
         }
       }
       if (event.getEventRegistrationList().size() > 0) {
         if (!eventService.cheackValidRegistrationDate(event)) {
-          response.setError("please Remove InValid Registration Date Remove");
+          response.setError("Please remove invalid registration date remove");
         }
       }
       Integer registarationCounter = event.getEventRegistrationList().size();

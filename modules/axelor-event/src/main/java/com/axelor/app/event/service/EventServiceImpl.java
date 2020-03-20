@@ -27,7 +27,6 @@ public class EventServiceImpl implements EventService {
               .getEventFees()
               .multiply(discount.getDiscountPercentage())
               .divide(new BigDecimal(100))));
-      System.err.println(discount);
     } catch (Exception e) {
     }
     return discount;
@@ -72,7 +71,7 @@ public class EventServiceImpl implements EventService {
         messageService.sendByEmail(message);
       }
     } catch (Exception e) {
-      // e.fillInStackTrace();
+
     }
     return event;
   }
@@ -84,7 +83,6 @@ public class EventServiceImpl implements EventService {
           LocalDate registrationDate = eventRegistarationObject.getRegistrationDate().toLocalDate();
           if (!(registrationDate.isBefore(event.getRegistrationOpen()))
               && !(registrationDate.isAfter(event.getRegistrationClose()))) {
-
             return true;
           }
         }
