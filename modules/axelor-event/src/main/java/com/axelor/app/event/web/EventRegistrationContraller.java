@@ -3,15 +3,17 @@ package com.axelor.app.event.web;
 import com.axelor.app.event.service.EventRegistrationService;
 import com.axelor.event.db.Event;
 import com.axelor.event.db.EventRegistaration;
+import com.axelor.event.db.repo.EventRepository;
+import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
+import com.google.inject.persist.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class EventRegistrationContraller {
   @Inject EventRegistrationService eventRegistrationService;
-
- 
 
   public void calculateTotalAmount(ActionRequest request, ActionResponse response) {
     try {
@@ -21,7 +23,7 @@ public class EventRegistrationContraller {
       response.setValue("totalEntry", event.getTotalEntry());
       response.setValue("totalDiscount", event.getTotalDiscount());
     } catch (Exception e) {
-      // System.out.println("hello problem:" + e.fillInStackTrace());
+
     }
   }
 
@@ -29,9 +31,11 @@ public class EventRegistrationContraller {
     try {
       EventRegistaration eventRegistaration = request.getContext().asType(EventRegistaration.class);
       Event event = eventRegistaration.getEvent();
-      Integer registore = event.getEventRegistrationList().size();
-      if (event.getCapacity() <= registore) {
-        response.setError("Event capacity not more thane:" + event.getCapacity());
+      if (event == null) {
+        event = request.getContext().getParent().asType(Event.class);
+        if (event == null) {
+          response.setError("please check Event");
+        }
       }
       LocalDate registrationDate = eventRegistaration.getRegistrationDate().toLocalDate();
       if (!(registrationDate.isBefore(event.getRegistrationOpen()))
@@ -40,21 +44,39 @@ public class EventRegistrationContraller {
             eventRegistrationService.calculateEventRegistrationAmount(eventRegistaration, event);
         response.setValue("amount", eventRegistaration.getAmount());
       } else {
-        response.setNotify("registration date not approved");
         response.setValue("registrationDate", null);
+        response.setValue("amount", BigDecimal.ZERO);
+        response.setNotify("registration date not approved");
       }
     } catch (Exception e) {
 
     }
   }
 
-  public void checkCapacityOfEvent(ActionRequest request, ActionResponse response) {
+  @Transactional
+  public void netTotalSaveEventRegistration(ActionRequest request, ActionResponse response) {
     EventRegistaration eventRegistaration = request.getContext().asType(EventRegistaration.class);
     Event event = eventRegistaration.getEvent();
-    Integer registore = event.getEventRegistrationList().size();
-    if (event.getCapacity() <= registore) {
-      response.setNotify("Event capacity not more thane:" + event.getCapacity());
-      response.setValue("event", null);
+    event = eventRegistrationService.setNetAmountAndTotal(event);
+    Beans.get(EventRepository.class).save(event);
+  }
+
+  public void checkCapacityOfEvent(ActionRequest request, ActionResponse response) {
+    try {
+      EventRegistaration eventRegistaration = request.getContext().asType(EventRegistaration.class);
+      Event event = eventRegistaration.getEvent();
+      if (event == null) {
+        event = request.getContext().getParent().asType(Event.class);
+        if (event == null) {
+          response.setError("please check Event");
+        }
+      }
+      Integer eventRegistrationCount = event.getEventRegistrationList().size();
+      if (event.getCapacity() <= eventRegistrationCount) {
+        response.setError("Not More Than Capacity:" + event.getCapacity());
+      }
+    } catch (Exception e) {
+
     }
   }
 }

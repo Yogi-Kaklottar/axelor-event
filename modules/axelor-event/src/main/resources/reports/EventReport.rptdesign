@@ -1826,7 +1826,6 @@ where er.event=?;]]></xml-property>
             <column id="82"/>
             <column id="83"/>
             <column id="84"/>
-            <column id="85"/>
             <column id="86"/>
             <header>
                 <row id="64">
@@ -1853,13 +1852,6 @@ where er.event=?;]]></xml-property>
                             <property name="fontSize">12pt</property>
                             <property name="textAlign">left</property>
                             <text-property name="text">Registration date</text-property>
-                        </label>
-                    </cell>
-                    <cell id="68">
-                        <label id="90">
-                            <property name="fontSize">12pt</property>
-                            <property name="textAlign">left</property>
-                            <text-property name="text">Address</text-property>
                         </label>
                     </cell>
                     <cell id="69">
@@ -1891,12 +1883,6 @@ where er.event=?;]]></xml-property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["registration_date"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
-                    <cell id="74">
-                        <text id="95">
-                            <property name="contentType">html</property>
-                            <text-property name="content"><![CDATA[<VALUE-OF>row["address"]</VALUE-OF>]]></text-property>
-                        </text>
-                    </cell>
                     <cell id="75">
                         <text id="96">
                             <property name="contentType">html</property>
@@ -1910,7 +1896,6 @@ where er.event=?;]]></xml-property>
                     <cell id="77"/>
                     <cell id="78"/>
                     <cell id="79"/>
-                    <cell id="80"/>
                     <cell id="81"/>
                 </row>
             </footer>

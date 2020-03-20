@@ -10,29 +10,31 @@
      <field name="address"/>
      <field name="registrationDate"/>
      <field name="amount"/>
-
+     <field name="isEmailSend"/>
   </grid>
-  <form name="event-registration-form" title="Event Registration List"   model="com.axelor.event.db.EventRegistaration">
+  <form name="event-registration-form" title="Event Registration List" onSave="action-method-event-Registration-chage-event-check-capacity,action-method-event-onsave-event-registration-net-calculation"  onNew="action-attrs-event-onnew-event-registration-cheack-parent"   model="com.axelor.event.db.EventRegistaration">
     <panel title="Event Registration">
-      <field name="event" onChange="action-method-event-Registration-chage-event-check-capacity" hideIf="__parent__"/>
+      <field name="event"/>
      <field name="name"/>
      <field name="email" pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$" widget="Email"/>
      <field name="address"/>
-     <field name="registrationDate" onChange="action-method-event-register-date-validate-onchange,action-method-event-net-calculation"/>
+     <field name="registrationDate" onChange="action-method-event-register-date-validate-onchange"/>
      <field name="amount"/>
     </panel>
   </form>
+  <action-method name="action-method-event-onsave-event-registration-net-calculation">
+    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="netTotalSaveEventRegistration" />
+  </action-method>
   <action-method name="action-method-event-register-date-validate-onchange">
     <call class="com.axelor.app.event.web.EventRegistrationContraller" method="validateRegisterDate" />
   </action-method>
   <action-method name="action-method-event-Registration-chage-event-check-capacity">
     <call class="com.axelor.app.event.web.EventRegistrationContraller" method="checkCapacityOfEvent" />
   </action-method>
-   <action-method name="action-method-event-net-calculation">
-    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="calculateTotalAmount" />
-  </action-method>
 
-<!--   <action-record name="action-attrs-event-registration-onload-set-default" model="com.axelor.event.db.EventRegistaration"> -->
-<!--    <field name="registrationDate" expr="eval: __dateTime__"/> -->
-<!--   </action-record> -->
+
+<action-attrs name="action-attrs-event-onnew-event-registration-cheack-parent">
+  <attribute for="event" name="hidden" expr="true" if="__parent__"/>
+</action-attrs>
+
   </object-views>

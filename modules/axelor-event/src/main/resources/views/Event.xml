@@ -4,6 +4,7 @@
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axel or.com/xml/ns/object-views/object-views_5.2.xsd">
 
   <grid name="event-grid" title="Event List" model="com.axelor.event.db.Event">
+
     <field name="reference" />
     <field name="startDate" />
     <field name="endDate" />
@@ -18,30 +19,29 @@
     <field name="totalEntry" />
     <field name="amountCollect" />
     <field name="totalDiscount" />
-
-
-  </grid>
-  <form name="event-form" title="Event list" model="com.axelor.event.db.Event"  onLoad="action-method-event-net-calculation">
+   </grid>
+  <form name="event-form" title="Event list" model="com.axelor.event.db.Event" onSave="action-method-event-onsave-tocheack-event-registartionlist,action-method-event-net-calculation"  >
    <toolbar>
-      <button name="eventData" title="Import Event Data" onClick="action-view-event-import-btnclick" />
-      <button name="eventBtn" title="Report" onClick="action-report-event-view-btnClick"/>
+      <button name="eventData" title="Import Event Data" onClick="save,action-view-event-import-btnclick" showIf="id" />
+      <button name="eventBtn" title="Report" onClick="save,action-report-event-view-btnClick" showIf="id"/>
+      <button name="emailBtn" title="Send Email" onClick="save,action-method-event-button-click-send-mail" showIf="id"/>
     </toolbar>
     <panel title="Event">
       <field name="reference" />
-      <field name="startDate" />
-      <field name="endDate" onChange="action-method-event-onchange-close-date"/>
+      <field name="startDate" onChange="action-method-event-onchange-close-date"/>
+      <field name="endDate" onChange="action-attrs-event-onchange-date,action-method-event-onchange-close-date"/>
       <field name="vanue" />
-      <field name="registrationOpen" />
-      <field name="registrationClose"  onChange="action-method-event-onchange-close-date"  />
+      <field name="registrationOpen" onChange="action-attrs-event-onchange-date,action-method-event-onchange-close-date"/>
+      <field name="registrationClose"  onChange="action-attrs-event-onchange-date,action-method-event-onchange-close-date,action-method-event-onchange-check-start-date"  />
       <field name="capacity" />
       <field name="eventFees" />
       <field name="discription"   widget="html" colSpan="12" />
     </panel>
     <panel title="Discount">
-      <field name="discountList" colSpan="12" onChange="save"/>
+      <field name="discountList" colSpan="12"/>
     </panel>
     <panel title="Event Registration">
-      <field name="eventRegistrationList"  colSpan="12" onChange="save,action-method-event-net-calculation,save" />
+      <field name="eventRegistrationList"  colSpan="12" onChange="action-method-event-net-calculation" />
     </panel>
     <panel title="Total Calculation">
       <field name="totalEntry" />
@@ -49,19 +49,36 @@
       <field name="totalDiscount" />
     </panel>
   </form>
-
+  
+  
+<action-attrs name="action-attrs-event-onchange-date">
+  <attribute for="endDate" name="value" expr="eval: null" if="startDate==null"/>
+   <attribute for="registrationOpen" name="value" expr="eval: null" if="startDate==null"/>
+    <attribute for="registrationClose" name="value" expr="eval: null" if="startDate==null"/>
+</action-attrs>
    <action-method name="action-method-event-onchange-close-date">
     <call class="com.axelor.app.event.web.EventController" method="compareEventRegistrationDate" />
   </action-method>
-
-  <action-view name="action-view-event-import-btnclick" model="com.axelor.event.db.Event" title="Event">
+  <action-method name="action-method-event-onchange-check-start-date">
+    <call class="com.axelor.app.event.web.EventController" method="compareEventRegistrationDateAndStartDate" />
+  </action-method>
+   <action-method name="action-method-event-button-click-send-mail">
+    <call class="com.axelor.app.event.web.EventController" method="sendEmail" />
+  </action-method>
+  <action-method name="action-method-event-onsave-tocheack-event-registartionlist">
+    <call class="com.axelor.app.event.web.EventController" method="checkAllRegistrationDateValidOrNot" />
+  </action-method>
+  <action-view name="action-view-event-import-btnclick" model="com.axelor.apps.base.db.Wizard" title="Event">
     <view type="form" name="event-import-form"/>
+      <view-param name="popup" value="true"/>
   </action-view>
   <action-report output="product" name="action-report-event-view-btnClick" design="EventReport.rptdesign">
     <param name="id" expr="eval: __self__.id"/>
   </action-report>
-
-
+<!-- onLoad="action-method-event-net-calculation,save" -->
+ <action-method name="action-method-event-net-calculation">
+    <call class="com.axelor.app.event.web.EventRegistrationContraller" method="calculateTotalAmount" />
+  </action-method>
 <cards name="event-card" title="Event" model="com.axelor.event.db.Event">
 
       <field name="reference" />

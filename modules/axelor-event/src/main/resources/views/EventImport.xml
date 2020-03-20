@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axel or.com/xml/ns/object-views/object-views_5.2.xsd">
 
- <form name="event-import-form" title="Event import list" model="com.axelor.event.db.Event" >
+ <form name="event-import-form" title="Event import list" model="com.axelor.apps.base.db.Wizard" >
     <panel title="Event">
      <field type="many-to-one" name="metaFile" title="File" widget="binary-link" target="com.axelor.meta.db.MetaFile"/>
-     <button name="eventData" title="Import Event Data" onClick="save,action-method-check-validation"/>
+     <button name="eventData" title="Import Event Data" onClick="action-method-check-validation" readonlyIf="metaFile == null"/>
      </panel>
      </form>
   <action-method name="action-method-check-validation">
